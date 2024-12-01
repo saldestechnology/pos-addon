@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL") // Update your .env file with the correct SQLite file path
+}
+
+model Product {
+  id            String          @id @default(uuid())
+  name          String
+  basePrice     Int             // Base price in the smallest currency unit (e.g., cents)
+  description   String?         // Optional description for the product
+  categoryId    String
+  category      Category        @relation(fields: [categoryId], references: [id])
+  modifications Modification[]  // Relationship to modifications
+  addonGroups   AddonGroupRelation[] // Relationship to associated addon groups
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Category {
+  id        String     @id @default(uuid())
+  name      String     // Category name
+  products  Product[]  // Relationship to products in this category
+}
+
+model Modification {
+  id          String              @id @default(uuid())
+  productId   String
+  product     Product             @relation(fields: [productId], references: [id])
+  name        String              // Modification name (e.g., "Size", "Flavor")
+  options     ModificationOption[] // Relationship to modification options
+}
+
+model ModificationOption {
+  id              String        @id @default(uuid())
+  modificationId  String
+  modification    Modification  @relation(fields: [modificationId], references: [id])
+  name            String        // Option name (e.g., "Normal", "Coca Cola")
+  addonPrice      Int           // Price adjustment for this option
+  sortOrder       Int           // Sort order for displaying options
+}
+
+model AddonGroup {
+  id             String      @id @default(uuid())
+  name           String      // Addon group name (e.g., "Extra toppings")
+  limit          Int         // Maximum number of addons allowed in this group
+  sortOrder      Int         // Sort order for displaying addon groups
+  addons         Addon[]     // Relationship to addons
+  products       AddonGroupRelation[] // Relationship to associated products
+}
+
+model Addon {
+  id             String      @id @default(uuid())
+  addonGroupId   String
+  addonGroup     AddonGroup  @relation(fields: [addonGroupId], references: [id])
+  name           String      // Addon name (e.g., "Whipped cream")
+  price          Int         // Addon price
+  limit          Int         // Maximum quantity of this addon allowed
+  sortOrder      Int         // Sort order for displaying addons
+}
+
+model AddonGroupRelation {
+  id           String      @id @default(uuid())
+  productId    String
+  product      Product     @relation(fields: [productId], references: [id])
+  addonGroupId String
+  addonGroup   AddonGroup  @relation(fields: [addonGroupId], references: [id])
+}
