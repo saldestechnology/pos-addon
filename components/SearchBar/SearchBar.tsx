@@ -18,14 +18,22 @@ export default () => {
     setProducts(products);
   };
 
+  const handleReset = () => {
+    setSearch("");
+    setProducts([]);
+  };
+
   return (
     <>
       <div className="col-span-9 row-span-1 flex justify-center">
         <input
           onChange={handleSearch}
+          value={search}
           className="w-full px-4 text-2xl text-black outline-none"
         />
-        <button className="bg-blue-500 px-4 text-white">Reset</button>
+        <button onClick={handleReset} className="bg-blue-500 px-4 text-white">
+          Reset
+        </button>
       </div>
       {search && (
         <div className="animate-fade z-20 col-start-3 col-end-9 row-start-3 row-end-9 overflow-y-scroll bg-white shadow-xl">
