@@ -12,7 +12,7 @@ export default async function CategoryById({
     where: { categoryId: categoryId },
   });
   return (
-    <div className="col-start-2 col-end-10 row-start-2 row-end-12 bg-lime-600 p-4">
+    <div className="col-start-2 col-end-10 row-start-2 row-end-12 bg-white px-4">
       <ListProducts products={products} />
     </div>
   );
