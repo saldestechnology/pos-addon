@@ -1,8 +1,51 @@
+"use client";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { useState } from "react";
+import { prisma } from "@/lib/prisma";
+import { Product } from "@prisma/client";
+
 export default () => {
+  const [search, setSearch] = useState("");
+  const [products, setProducts] = useState<Product[]>([]);
+
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    const res = await fetch(`/api/search/${e.target.value}`);
+    if (!res.ok) {
+      return;
+    }
+    const products: Product[] = await res.json();
+    setProducts(products);
+  };
+
   return (
-    <div className="col-span-9 row-span-1 flex justify-center">
-      <input className="w-full px-4 text-2xl text-black outline-none" />
-      <button className="bg-blue-500 px-4 text-white">Reset</button>
-    </div>
+    <>
+      <div className="col-span-9 row-span-1 flex justify-center">
+        <input
+          onChange={handleSearch}
+          className="w-full px-4 text-2xl text-black outline-none"
+        />
+        <button className="bg-blue-500 px-4 text-white">Reset</button>
+      </div>
+      {search && (
+        <div className="animate-fade z-20 col-start-3 col-end-9 row-start-3 row-end-9 overflow-y-scroll bg-white shadow-xl">
+          {products.length ? (
+            <ul className="flex flex-wrap gap-2">
+              {products.map(({ id, name }) => (
+                <li key={id}>
+                  <button className="flex h-20 w-20 items-center justify-center bg-blue-500 p-16 text-white">
+                    {name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <AiOutlineLoading3Quarters className="animate-spin text-4xl" />
+            </div>
+          )}
+        </div>
+      )}
+    </>
   );
 };
