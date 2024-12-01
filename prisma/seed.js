@@ -75,7 +75,7 @@ async function main() {
 
       const types = imageTypes[category.name] || ['food'];
       const randomType = types[Math.floor(Math.random() * types.length)];
-      return `https://source.unsplash.com/featured/?${randomType},food`;
+      return faker.image.urlLoremFlickr({ width: 400, height: 300 });
     };
 
     // Create products
