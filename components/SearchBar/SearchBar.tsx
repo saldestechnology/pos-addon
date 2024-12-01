@@ -2,10 +2,18 @@
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useState } from "react";
 import { Product } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 export default function SearchBar() {
+  const router = useRouter();
+
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
+
+  const handleClick = (id: string) => {
+    setSearch("");
+    router.push(`/product/${id}`);
+  };
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -45,7 +53,10 @@ export default function SearchBar() {
             <ul className="flex flex-wrap gap-2">
               {products.map(({ id, name }) => (
                 <li key={id}>
-                  <button className="flex h-20 w-20 items-center justify-center bg-blue-500 p-16 text-white">
+                  <button
+                    onClick={() => handleClick(id)}
+                    className="flex h-20 w-20 items-center justify-center bg-blue-500 p-16 text-white"
+                  >
                     {name}
                   </button>
                 </li>
