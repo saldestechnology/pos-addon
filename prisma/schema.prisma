@@ -8,17 +8,16 @@ datasource db {
 }
 
 model Product {
-  id            String               @id @default(uuid())
+  id            String              @id @default(uuid())
   name          String
   basePrice     Int
   description   String?
-  imageUrl      String?
   categoryId    String
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
-  addonGroups   AddonGroupRelation[]
-  modifications Modification[]
-  category      Category             @relation(fields: [categoryId], references: [id])
+  category      Category            @relation(fields: [categoryId], references: [id])
+  modifications ModificationGroup[]
+  addonGroups   AddonGroup[]        @relation("ProductToAddonGroup")
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
 }
 
 model Category {
@@ -27,46 +26,38 @@ model Category {
   products Product[]
 }
 
-model Modification {
+model ModificationGroup {
   id        String               @id @default(uuid())
   productId String
-  name      String
+  type      String
   product   Product              @relation(fields: [productId], references: [id])
   options   ModificationOption[]
 }
 
 model ModificationOption {
-  id             String       @id @default(uuid())
-  modificationId String
-  name           String
-  addonPrice     Int
-  sortOrder      Int
-  modification   Modification @relation(fields: [modificationId], references: [id])
+  id                  String            @id @default(uuid())
+  modificationGroupId String
+  modificationGroup   ModificationGroup @relation(fields: [modificationGroupId], references: [id])
+  name                String
+  addonPrice          Int
+  sortOrder           Int
 }
 
 model AddonGroup {
-  id        String               @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
   limit     Int
   sortOrder Int
   addons    Addon[]
-  products  AddonGroupRelation[]
+  products  Product[] @relation("ProductToAddonGroup")
 }
 
 model Addon {
   id           String     @id @default(uuid())
   addonGroupId String
+  addonGroup   AddonGroup @relation(fields: [addonGroupId], references: [id])
   name         String
   price        Int
   limit        Int
   sortOrder    Int
-  addonGroup   AddonGroup @relation(fields: [addonGroupId], references: [id])
-}
-
-model AddonGroupRelation {
-  id           String     @id @default(uuid())
-  productId    String
-  addonGroupId String
-  product      Product    @relation(fields: [productId], references: [id])
-  addonGroup   AddonGroup @relation(fields: [addonGroupId], references: [id])
 }
