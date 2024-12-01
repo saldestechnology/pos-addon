@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 interface ButtonProps {
   id: string;
   name: string;
+  price: number;
 }
 
-export default ({ id, name }: ButtonProps) => {
+export default ({ id, name, price }: ButtonProps) => {
   const router = useRouter();
 
   const handleClick = () => {
@@ -17,9 +18,10 @@ export default ({ id, name }: ButtonProps) => {
   return (
     <button
       onClick={handleClick}
-      className="flex h-32 w-32 items-center justify-center bg-white p-16 text-black"
+      className="border-1 flex h-32 w-32 flex-col items-center justify-between rounded-md border-slate-500 bg-white p-2 text-black"
     >
-      {name}
+      <div className="flex">{name}</div>
+      <div className="border-t-1 w-9/12 pt-1">{price}</div>
     </button>
   );
 };
