@@ -3,35 +3,26 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const categoryId = searchParams.get('categoryId');
-    
     const products = await prisma.product.findMany({
-      where: categoryId ? { categoryId } : undefined,
       include: {
         category: true,
-        modifications: {
-          include: {
-            options: true,
-          },
-        },
-        addonGroups: {
-          include: {
-            addonGroup: {
-              include: {
-                addons: true,
-              },
-            },
-          },
-        },
-      },
+      }
     });
     
-    return NextResponse.json(products);
-  } catch (error) {
-    console.error('Error fetching products:', error);
+    return NextResponse.json({ data: products });
+  } catch (error: any) { // Type assertion here
+    console.error('Detailed error:', {
+      message: error.message,
+      code: error.code,
+      meta: error.meta
+    });
+    
     return NextResponse.json(
-      { error: 'Failed to fetch products' },
+      { 
+        error: 'Failed to fetch/create products', 
+        details: error.message,
+        code: error.code
+      },
       { status: 500 }
     );
   }
@@ -46,13 +37,13 @@ export async function POST(request: NextRequest) {
         basePrice: body.basePrice,
         description: body.description,
         categoryId: body.categoryId,
+        imageUrl: body.imageUrl,
       },
       include: {
         category: true,
       },
     });
-    
-    return NextResponse.json(product, { status: 201 });
+    return NextResponse.json({ data: product }, { status: 201 });
   } catch (error) {
     console.error('Error creating product:', error);
     return NextResponse.json(
