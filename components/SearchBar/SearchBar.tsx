@@ -1,15 +1,19 @@
 "use client";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useState } from "react";
-import { prisma } from "@/lib/prisma";
 import { Product } from "@prisma/client";
 
-export default () => {
+export default function SearchBar() {
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
+
+    if (e.target.value.length < 3) {
+      return;
+    }
+
     const res = await fetch(`/api/search/${e.target.value}`);
     if (!res.ok) {
       return;
@@ -56,4 +60,4 @@ export default () => {
       )}
     </>
   );
-};
+}
