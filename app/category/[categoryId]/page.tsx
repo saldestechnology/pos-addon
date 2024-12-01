@@ -2,7 +2,7 @@ import ListProducts from "@/components/ListProducts/ListProducts";
 import { prisma } from "@/lib/prisma";
 import { Product } from "@prisma/client";
 
-export default async function Products({
+export default async function CategoryById({
   params,
 }: {
   params: { categoryId: string };
