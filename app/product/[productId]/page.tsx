@@ -1,4 +1,3 @@
-import ListProducts from "@/components/ListProducts/ListProducts";
 import { prisma } from "@/lib/prisma";
 import { Product } from "@prisma/client";
 
