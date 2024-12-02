@@ -13,7 +13,7 @@ const nameToIconMap: Record<string, string> = {
   "Pastries & Snacks": "🥐",
 };
 
-export default ({ id, name }: ButtonProps) => {
+export default function CategoryListBtn({ id, name }: ButtonProps) {
   const router = useRouter();
 
   const handleClick = () => {

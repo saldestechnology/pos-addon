@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { Category } from "@prisma/client";
 import Button from "./Button";
 
-export default async () => {
+export default async function CategoryList() {
   const categories: Category[] = await prisma.category.findMany({});
 
   return (
@@ -16,4 +16,4 @@ export default async () => {
       </ul>
     </div>
   );
-};
+}
