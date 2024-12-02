@@ -12,25 +12,18 @@ export default function OrderList() {
       <div className="flex-grow pt-4">
         {orderItems.length ? (
           orderItems.map((item) => (
-            <div
-              key={getOrderItemKey(item.product.id, item.addons)}
-              className="border-b p-2"
-            >
+            <div key={item.id} className="border-b p-2">
               <div className="flex justify-between">
                 <div className="flex flex-row">
                   <button
-                    onClick={() =>
-                      updateQuantity(item.product.id, item.quantity - 1)
-                    }
+                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
                     className="flex w-4 items-center justify-center text-black"
                   >
                     <FiMinus />
                   </button>
                   <span className="px-2 text-black">{item.quantity}</span>
                   <button
-                    onClick={() =>
-                      updateQuantity(item.product.id, item.quantity + 1)
-                    }
+                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
                     className="flex w-4 items-center justify-center text-black"
                   >
                     <FiPlus />
@@ -68,17 +61,7 @@ export default function OrderList() {
       <div className="border-t-2 border-slate-600 p-4">
         <div className="flex justify-between pb-4">
           <span className="font-semibold text-black">Total:</span>
-          <span className="font-semibold text-black">
-            {orderItems.reduce(
-              (sum, item) =>
-                sum +
-                item.quantity *
-                  (item.product.basePrice +
-                    item.addons.reduce((acc, addon) => acc + addon.price, 0)),
-              0,
-            )}{" "}
-            kr
-          </span>
+          <span className="font-semibold text-black">{total} kr</span>
         </div>
         <button
           onClick={() => alert("Order placed!")}
