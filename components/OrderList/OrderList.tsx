@@ -8,36 +8,42 @@ export default function OrderList() {
   console.log("rendering order list");
   return (
     <div className="col-start-10 col-end-13 row-start-1 row-end-13 flex h-full flex-col border-l-2 border-slate-600 bg-white">
-      <div className="flex-grow">
-        {orderItems.map((item) => (
-          <div key={item.product.id} className="flex justify-between p-2">
-            <div className="flex flex-row">
-              <button
-                onClick={() =>
-                  updateQuantity(item.product.id, item.quantity - 1)
-                }
-                className="flex w-4 items-center justify-center text-black"
-              >
-                <FiMinus />
-              </button>
-              <span className="px-2 text-black">{item.quantity}</span>
-              <button
-                onClick={() =>
-                  updateQuantity(item.product.id, item.quantity + 1)
-                }
-                className="flex w-4 items-center justify-center text-black"
-              >
-                <FiPlus />
-              </button>
-              <span className="max-w-36 overflow-hidden text-ellipsis text-nowrap pl-4 text-black">
-                {item.product.name}
+      <div className="flex-grow pt-4">
+        {orderItems.length ? (
+          orderItems.map((item) => (
+            <div key={item.product.id} className="flex justify-between p-2">
+              <div className="flex flex-row">
+                <button
+                  onClick={() =>
+                    updateQuantity(item.product.id, item.quantity - 1)
+                  }
+                  className="flex w-4 items-center justify-center text-black"
+                >
+                  <FiMinus />
+                </button>
+                <span className="px-2 text-black">{item.quantity}</span>
+                <button
+                  onClick={() =>
+                    updateQuantity(item.product.id, item.quantity + 1)
+                  }
+                  className="flex w-4 items-center justify-center text-black"
+                >
+                  <FiPlus />
+                </button>
+                <span className="max-w-36 overflow-hidden text-ellipsis text-nowrap pl-4 text-black">
+                  {item.product.name}
+                </span>
+              </div>
+              <span className="text-black">
+                {item.product.basePrice * item.quantity} kr
               </span>
             </div>
-            <span className="text-black">
-              {item.product.basePrice * item.quantity} kr
-            </span>
+          ))
+        ) : (
+          <div className="flex h-full items-center justify-center">
+            <span className="text-black">No items in order</span>
           </div>
-        ))}
+        )}
       </div>
 
       <div className="border-t-2 border-slate-600 p-4">
