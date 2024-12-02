@@ -1,6 +1,5 @@
-import { Addon, AddonGroup, Product } from "@prisma/client";
 import Button from "./Button";
-import { ProductWithAddons } from "./types/product";
+import { ProductWithAddons } from "../types/product";
 
 interface ListProductsProps {
   products: ProductWithAddons[];

@@ -5,8 +5,8 @@ import { Addon, AddonGroup, Product } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import ProductModal from "./ProductModal";
-import { ProductWithAddons } from "./types/product";
+import ProductModal from "../ProductModal/ProductModal";
+import { ProductWithAddons } from "../types/product";
 
 interface ButtonProps {
   product: ProductWithAddons;
