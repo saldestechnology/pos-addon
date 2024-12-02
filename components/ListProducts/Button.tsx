@@ -1,18 +1,19 @@
 "use client";
 
+import { useOrder } from "@/context/OrderContext";
+import { Product } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
 interface ButtonProps {
-  id: string;
-  name: string;
-  price: number;
+  product: Product;
 }
 
-export default ({ id, name, price }: ButtonProps) => {
+export default ({ product }: ButtonProps) => {
+  const { addToOrder } = useOrder();
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/product/${id}`);
+    addToOrder(product);
   };
 
   return (
@@ -20,8 +21,8 @@ export default ({ id, name, price }: ButtonProps) => {
       onClick={handleClick}
       className="border-1 flex h-32 w-32 flex-col items-center justify-between rounded-md border-slate-500 bg-white p-2 text-black"
     >
-      <div className="flex">{name}</div>
-      <div className="border-t-1 w-9/12 pt-1">{price} kr</div>
+      <div className="flex">{product.name}</div>
+      <div className="border-t-1 w-9/12 pt-1">{product.basePrice} kr</div>
     </button>
   );
 };

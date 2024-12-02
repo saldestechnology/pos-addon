@@ -8,9 +8,9 @@ interface ListProductsProps {
 export default ({ products }: ListProductsProps) => {
   return (
     <ul className="flex w-full flex-wrap gap-4">
-      {products.map(({ id, name, basePrice }) => (
-        <li key={id}>
-          <Button id={id} name={name} price={basePrice} />
+      {products.map((product) => (
+        <li key={product.id}>
+          <Button product={product} />
         </li>
       ))}
     </ul>
