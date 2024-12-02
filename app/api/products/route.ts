@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const products = await prisma.product.findMany({
       include: {
@@ -16,6 +16,8 @@ export async function GET(request: NextRequest) {
     });
     
     return NextResponse.json({ data: products });
+  // TODO: I am fine with this error handling for now, but we should improve it later
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('Detailed error:', {
       message: error.message,

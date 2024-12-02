@@ -1,6 +1,5 @@
 "use client";
 
-import { getOrderItemKey } from "@/utils/orderUtils";
 import { useOrder } from "@/context/OrderContext";
 import { FiMinus, FiPlus } from "react-icons/fi";
 

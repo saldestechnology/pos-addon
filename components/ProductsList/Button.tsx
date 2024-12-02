@@ -7,7 +7,7 @@ interface ButtonProps {
   product: ProductWithAddons;
 }
 
-export default ({ product }: ButtonProps) => {
+export default function ProductListButton({ product }: ButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleClick = () => {
@@ -29,4 +29,4 @@ export default ({ product }: ButtonProps) => {
       )}
     </>
   );
-};
+}

@@ -3,7 +3,7 @@ import { useState } from "react";
 
 interface ItemProps {
   addon: Addon;
-  onChange: (addon: any, isSelected: boolean) => void;
+  onChange: (addon: Addon, isSelected: boolean) => void;
 }
 
 export default function Item({ addon, onChange }: ItemProps) {

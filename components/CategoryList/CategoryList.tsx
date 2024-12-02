@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Category } from "@prisma/client";
 import Button from "./Button";
-import { BiSearchAlt2 } from "react-icons/bi";
 import SearchBar from "../SearchBar";
 
 export default async function CategoryList() {

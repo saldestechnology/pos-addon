@@ -2,11 +2,9 @@ import ProductsList from "@/components/ProductsList/ProductsList";
 import { ProductWithAddons } from "@/components/types/product";
 import { prisma } from "@/lib/prisma";
 
-export default async function CategoryById({
-  params,
-}: {
-  params: { categoryId: string };
-}) {
+type Params = Promise<{ categoryId: string }>;
+
+export default async function CategoryById({ params }: { params: Params }) {
   const { categoryId } = await params;
 
   const category = await prisma.category.findUnique({
