@@ -16,7 +16,6 @@ export default ({ product }: ButtonProps) => {
   const { addToOrder } = useOrder();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  console.log(product);
   const handleClick = () => {
     // addToOrder(product);
     setIsModalOpen(true);
