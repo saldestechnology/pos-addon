@@ -8,6 +8,11 @@ export default async function CategoryById({
   params: { categoryId: string };
 }) {
   const { categoryId } = await params;
+
+  const category = await prisma.category.findUnique({
+    where: { id: categoryId },
+  });
+
   const products: ProductWithAddons[] = await prisma.product.findMany({
     where: { categoryId: categoryId },
     include: {
@@ -23,8 +28,11 @@ export default async function CategoryById({
       },
     },
   });
+
   return (
-    <div className="col-start-2 col-end-10 row-start-2 row-end-12 bg-white px-4">
+    <div className="col-start-2 col-end-10 row-start-1 row-end-12 bg-white px-4 pt-4">
+      <h1 className="mb-2 text-4xl font-bold text-black">{category?.name}</h1>
+      <hr />
       <ListProducts products={products} />
     </div>
   );
