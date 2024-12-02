@@ -1,5 +1,6 @@
 "use client";
 
+import { getOrderItemKey } from "@/utils/orderUtils";
 import { useOrder } from "@/context/OrderContext";
 import { FiMinus, FiPlus } from "react-icons/fi";
 
@@ -11,7 +12,10 @@ export default function OrderList() {
       <div className="flex-grow pt-4">
         {orderItems.length ? (
           orderItems.map((item) => (
-            <div key={item.product.id} className="border-b p-2">
+            <div
+              key={getOrderItemKey(item.product.id, item.addons)}
+              className="border-b p-2"
+            >
               <div className="flex justify-between">
                 <div className="flex flex-row">
                   <button

@@ -1,8 +1,18 @@
-// contexts/OrderContext.tsx
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
 import { Addon, Product } from "@prisma/client";
+
+const areAddonsEqual = (addons1: Addon[], addons2: Addon[]): boolean => {
+  if (addons1.length !== addons2.length) return false;
+
+  const sortedAddons1 = [...addons1].sort((a, b) => a.id.localeCompare(b.id));
+  const sortedAddons2 = [...addons2].sort((a, b) => a.id.localeCompare(b.id));
+
+  return sortedAddons1.every(
+    (addon, index) => addon.id === sortedAddons2[index].id,
+  );
+};
 
 type OrderItem = {
   product: Product;
@@ -26,12 +36,13 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
   const addToOrder = (product: Product, addons: Addon[]) => {
     setOrderItems((prevItems) => {
       const existingItem = prevItems.find(
-        (item) => item.product.id === product.id && item.addons === addons,
+        (item) =>
+          item.product.id === product.id && areAddonsEqual(item.addons, addons),
       );
 
       if (existingItem) {
         return prevItems.map((item) =>
-          item.product.id === product.id && item.addons === addons
+          item.product.id === product.id && areAddonsEqual(item.addons, addons)
             ? { ...item, quantity: item.quantity + 1 }
             : item,
         );
@@ -60,7 +71,11 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
   };
 
   const total = orderItems.reduce(
-    (sum, item) => sum + item.product.basePrice * item.quantity,
+    (sum, item) =>
+      sum +
+      (item.product.basePrice +
+        item.addons.reduce((acc, addon) => acc + addon.price, 0)) *
+        item.quantity,
     0,
   );
 
