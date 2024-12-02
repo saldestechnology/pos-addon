@@ -9,11 +9,11 @@ export default {
   theme: {
     extend: {
       animation: {
-        'fade-up': 'fadeUp .5s ease-in'
+        'fade-up': 'fadeUp .2s ease-in'
       },
       keyframes: {
         fadeUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '0%': { opacity: '0', transform: 'translateY(12px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' }
         },
       },
