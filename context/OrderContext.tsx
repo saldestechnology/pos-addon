@@ -2,16 +2,17 @@
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
-import { Product } from "@prisma/client";
+import { Addon, Product } from "@prisma/client";
 
 type OrderItem = {
   product: Product;
   quantity: number;
+  addons: Addon[];
 };
 
 type OrderContextType = {
   orderItems: OrderItem[];
-  addToOrder: (product: Product) => void;
+  addToOrder: (product: Product, addons: Addon[]) => void;
   removeFromOrder: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   total: number;
@@ -22,21 +23,21 @@ const OrderContext = createContext<OrderContextType | undefined>(undefined);
 export function OrderProvider({ children }: { children: React.ReactNode }) {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
 
-  const addToOrder = (product: Product) => {
+  const addToOrder = (product: Product, addons: Addon[]) => {
     setOrderItems((prevItems) => {
       const existingItem = prevItems.find(
-        (item) => item.product.id === product.id,
+        (item) => item.product.id === product.id && item.addons === addons,
       );
 
       if (existingItem) {
         return prevItems.map((item) =>
-          item.product.id === product.id
+          item.product.id === product.id && item.addons === addons
             ? { ...item, quantity: item.quantity + 1 }
             : item,
         );
       }
 
-      return [...prevItems, { product, quantity: 1 }];
+      return [...prevItems, { product, quantity: 1, addons }];
     });
   };
 
