@@ -37,7 +37,7 @@ export default function RootLayout({
             <SearchBar />
             <CategoryList />
             {children}
-            <div className="col-span-9 row-start-12 row-end-13 bg-blue-500"></div>
+            <div className="col-span-9 row-start-12 row-end-13 bg-slate-600"></div>
             <OrderList />
           </div>
         </OrderProvider>

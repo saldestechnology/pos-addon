@@ -7,7 +7,7 @@ interface ListProductsProps {
 
 export default ({ products }: ListProductsProps) => {
   return (
-    <ul className="flex w-full flex-wrap gap-4">
+    <ul className="flex w-full flex-wrap gap-4 py-4">
       {products.map((product) => (
         <li key={product.id}>
           <Button product={product} />

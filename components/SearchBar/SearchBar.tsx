@@ -37,9 +37,10 @@ export default function SearchBar() {
 
   return (
     <>
-      <div className="col-span-9 row-span-1 flex justify-center">
+      <div className="col-span-9 row-span-1 flex justify-center border-b-2 border-slate-600">
         <input
           onChange={handleSearch}
+          placeholder="Search"
           value={search}
           className="w-full px-4 text-2xl text-black outline-none"
         />
