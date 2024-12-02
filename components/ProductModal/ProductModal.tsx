@@ -1,6 +1,7 @@
 import { useOrder } from "@/context/OrderContext";
 import { Addon, AddonGroup, Product } from "@prisma/client";
 import { useState } from "react";
+import Item from "./Item";
 
 interface ProductModalProps {
   product: Product & {
@@ -36,21 +37,19 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
         className="animate-fade-up rounded-md bg-white p-4 text-black"
       >
         <h2 className="text-xl font-bold">{product.name}</h2>
-        <p>{product.description}</p>
-        <div>
+        <hr className="my-2" />
+        <p className="mb-4 italic text-slate-500">{product.description}</p>
+        <div className="flex flex-row gap-4">
           {product.addonGroups.map((group) => (
-            <div key={group.id}>
-              <h3 className="font-semibold">{group.name}</h3>
+            <div key={group.id} className="border-r-1 border-gray-200 pr-4">
+              <h3 className="mt-4 pl-2 text-lg font-semibold">{group.name}</h3>
+              <hr className="my-2" />
               {group.addons.map((addon) => (
-                <label key={addon.id} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    onChange={(e) => handleAddonChange(addon, e.target.checked)}
-                  />
-                  <span className="ml-2">
-                    {addon.name} (+{addon.price} kr)
-                  </span>
-                </label>
+                <Item
+                  key={addon.id}
+                  addon={addon}
+                  onChange={handleAddonChange}
+                />
               ))}
             </div>
           ))}
