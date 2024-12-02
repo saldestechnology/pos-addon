@@ -27,8 +27,14 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="animate-fade-up rounded-md bg-white p-4 text-black">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      onClick={onClose}
+    >
+      <div
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
+        className="animate-fade-up rounded-md bg-white p-4 text-black"
+      >
         <h2 className="text-xl font-bold">{product.name}</h2>
         <p>{product.description}</p>
         <div>
