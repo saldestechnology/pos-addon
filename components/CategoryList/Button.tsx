@@ -29,4 +29,4 @@ export default function CategoryListBtn({ id, name }: ButtonProps) {
       {nameToIconMap[name]}
     </button>
   );
-};
+}
