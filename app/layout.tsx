@@ -34,7 +34,6 @@ export default function RootLayout({
       >
         <OrderProvider>
           <div className="grid h-screen w-screen grid-cols-12 grid-rows-12">
-            <SearchBar />
             <CategoryList />
             {children}
             <div className="col-span-9 row-start-12 row-end-13 bg-slate-600"></div>

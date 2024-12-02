@@ -4,36 +4,28 @@ import { Product } from "@prisma/client";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import ProductModal from "@/components/ProductModal/ProductModal";
 import { ProductWithAddons } from "@/components/types/product";
+import SearchModal from "../SearchModal";
 
 export default function SearchBar() {
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] =
     useState<ProductWithAddons | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-    if (e.target.value.length < 3) return;
-
-    setIsLoading(true);
-
-    const res = await fetch(`/api/search/${e.target.value}`);
-    if (!res.ok) return;
-    const products: Product[] = await res.json();
-
-    setProducts(products);
-    setIsLoading(false);
+  const handleOpenSearchModal = () => {
+    setIsSearchModalOpen(!isSearchModalOpen);
   };
 
-  const handleClick = async (productId: string) => {
+  const addOrder = async (productId: string) => {
     const res = await fetch(`/api/products/${productId}`);
     if (!res.ok) return;
     const product: ProductWithAddons = await res.json();
 
     setSelectedProduct(product);
-    setIsModalOpen(true);
+    setIsProductModalOpen(true);
     handleReset();
   };
 
@@ -44,50 +36,23 @@ export default function SearchBar() {
 
   return (
     <>
-      <div className="col-span-9 row-span-1 flex justify-center border-b-2 border-slate-600">
-        <input
-          onChange={handleSearch}
-          placeholder="Search"
-          value={search}
-          className="w-full px-4 text-2xl text-black outline-none"
+      <button
+        onClick={handleOpenSearchModal}
+        type="button"
+        className="flex h-14 w-14 items-center justify-center rounded-md bg-slate-500 text-xl xl:h-24 xl:w-24 xl:text-base"
+      >
+        🔍
+      </button>
+      {isSearchModalOpen && (
+        <SearchModal
+          addOrder={addOrder}
+          onClose={() => setIsSearchModalOpen(false)}
         />
-        <button onClick={handleReset} className="bg-blue-500 px-4 text-white">
-          Reset
-        </button>
-      </div>
-      {search && (
-        <div className="scrollbar-hide animate-fade-up z-20 col-start-3 col-end-9 row-start-3 row-end-9 overflow-y-auto bg-white p-2 shadow-2xl">
-          {isLoading ? (
-            <div className="flex h-full w-full items-center justify-center">
-              <AiOutlineLoading3Quarters className="h-8 w-8 animate-spin text-gray-600" />
-            </div>
-          ) : products.length > 0 ? (
-            <ul className="flex flex-wrap gap-2">
-              {products.map((product) => (
-                <li key={product.id}>
-                  <button
-                    onClick={() => handleClick(product.id)}
-                    className="flex h-32 w-32 flex-col items-center justify-between rounded-md border-1 border-slate-500 bg-white p-2 text-black"
-                  >
-                    <div className="flex">{product.name}</div>
-                    <div className="w-9/12 border-t-1 pt-1">
-                      {product.basePrice} kr
-                    </div>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="flex h-full w-full items-center justify-center">
-              <p className="text-gray-600">No results found</p>
-            </div>
-          )}
-        </div>
       )}
-      {isModalOpen && selectedProduct && (
+      {isProductModalOpen && selectedProduct && (
         <ProductModal
           product={selectedProduct}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => setIsProductModalOpen(false)}
         />
       )}
     </>
