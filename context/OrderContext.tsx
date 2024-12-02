@@ -34,7 +34,6 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
       product.id,
       ...addons.map((addon) => addon.id),
     ]);
-    console.log({ product: product.name, uniqueId });
     setOrderItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.id === uniqueId);
 
@@ -57,9 +56,7 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
-    console.log({ productId, quantity });
     setOrderItems((prevItems) => {
-      console.log({ prevItems });
       return prevItems
         .map((item) => (item.id === productId ? { ...item, quantity } : item))
         .filter((item) => item.quantity > 0);
