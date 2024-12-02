@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import { Product } from "@prisma/client";
-import ProductModal from "@/components/ProductModal";
-import { ProductWithAddons } from "@/components/types/product";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import ProductModal from "@/components/ProductModal/ProductModal";
+import { ProductWithAddons } from "@/components/types/product";
 
 export default function SearchBar() {
   const [search, setSearch] = useState("");
@@ -11,15 +11,20 @@ export default function SearchBar() {
   const [selectedProduct, setSelectedProduct] =
     useState<ProductWithAddons | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
     if (e.target.value.length < 3) return;
 
+    setIsLoading(true);
+
     const res = await fetch(`/api/search/${e.target.value}`);
     if (!res.ok) return;
     const products: Product[] = await res.json();
+
     setProducts(products);
+    setIsLoading(false);
   };
 
   const handleClick = async (productId: string) => {
@@ -52,7 +57,11 @@ export default function SearchBar() {
       </div>
       {search && (
         <div className="animate-fade z-20 col-start-3 col-end-9 row-start-3 row-end-9 overflow-y-scroll bg-white p-2 shadow-xl">
-          {products.length ? (
+          {isLoading ? (
+            <div className="flex h-full w-full items-center justify-center">
+              <AiOutlineLoading3Quarters className="h-8 w-8 animate-spin text-gray-600" />
+            </div>
+          ) : products.length > 0 ? (
             <ul className="flex flex-wrap gap-2">
               {products.map((product) => (
                 <li key={product.id}>
@@ -70,7 +79,7 @@ export default function SearchBar() {
             </ul>
           ) : (
             <div className="flex h-full w-full items-center justify-center">
-              <AiOutlineLoading3Quarters className="animate-spin text-4xl" />
+              <p className="text-gray-600">No results found</p>
             </div>
           )}
         </div>
