@@ -1,11 +1,11 @@
 import Button from "./Button";
 import { ProductWithAddons } from "../types/product";
 
-interface ListProductsProps {
+interface ProductsListProps {
   products: ProductWithAddons[];
 }
 
-export default function ListProducts({ products }: ListProductsProps) {
+export default function ProductsList({ products }: ProductsListProps) {
   return (
     <ul className="flex w-full flex-wrap gap-4 py-4">
       {products.map((product) => (
