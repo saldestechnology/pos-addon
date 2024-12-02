@@ -1,6 +1,6 @@
 import ListProducts from "@/components/ListProducts/ListProducts";
+import { ProductWithAddons } from "@/components/types/product";
 import { prisma } from "@/lib/prisma";
-import { Product } from "@prisma/client";
 
 export default async function CategoryById({
   params,
@@ -8,11 +8,23 @@ export default async function CategoryById({
   params: { categoryId: string };
 }) {
   const { categoryId } = await params;
-  const products: Product[] = await prisma.product.findMany({
+  const products: ProductWithAddons[] = await prisma.product.findMany({
     where: { categoryId: categoryId },
+    include: {
+      modifications: {
+        include: {
+          options: true,
+        },
+      },
+      addonGroups: {
+        include: {
+          addons: true,
+        },
+      },
+    },
   });
   return (
-    <div className="col-start-2 col-end-10 row-start-2 row-end-12 bg-lime-600 p-4">
+    <div className="col-start-2 col-end-10 row-start-2 row-end-12 bg-white px-4">
       <ListProducts products={products} />
     </div>
   );

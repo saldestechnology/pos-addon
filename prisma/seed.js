@@ -1,164 +1,351 @@
-const { PrismaClient } = require("@prisma/client");
-const { faker } = require("@faker-js/faker");
-const prisma = new PrismaClient();
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
 
 async function main() {
-  try {
-    console.log('Starting cleanup...');
-    await prisma.$transaction([
-      prisma.addonGroupRelation.deleteMany(),
-      prisma.addon.deleteMany(),
-      prisma.addonGroup.deleteMany(),
-      prisma.modificationOption.deleteMany(),
-      prisma.modification.deleteMany(),
-      prisma.product.deleteMany(),
-      prisma.category.deleteMany(),
-    ]);
-    console.log('Database cleaned');
+  // Create categories
+  const hotDrinks = await prisma.category.create({
+    data: {
+      name: 'Hot Drinks',
+    },
+  })
 
-    // Create categories
-    console.log('Creating categories...');
-    const categories = await Promise.all(
-      ['Beverages', 'Food', 'Desserts', 'Snacks'].map(name =>
-        prisma.category.create({
-          data: { name }
-        })
-      )
-    );
-    console.log('Categories created:', categories.length);
+  const coldDrinks = await prisma.category.create({
+    data: {
+      name: 'Cold Drinks',
+    },
+  })
 
-    // Create addon groups
-    console.log('Creating addon groups...');
-    const addonGroups = await Promise.all(
-      [
-        { name: 'Extra Toppings', limit: 3, sortOrder: 1 },
-        { name: 'Syrups', limit: 2, sortOrder: 2 },
-        { name: 'Extra Shots', limit: 4, sortOrder: 3 },
-      ].map(group =>
-        prisma.addonGroup.create({
-          data: {
-            ...group,
-            addons: {
-              create: Array.from({ length: 4 }, (_, i) => ({
-                name: faker.commerce.productAdjective() + ' ' + faker.commerce.product(),
-                price: faker.number.int({ min: 50, max: 200 }),
-                limit: faker.number.int({ min: 1, max: 3 }),
-                sortOrder: i + 1,
-              })),
-            },
-          },
-        })
-      )
-    );
-    console.log('Addon groups created:', addonGroups.length);
+  const pastries = await prisma.category.create({
+    data: {
+      name: 'Pastries & Snacks',
+    },
+  })
 
-    // Helper function for image URLs
-    const getRandomImageUrl = (category) => {
-      const imageTypes = {
-        'Beverages': [
-          'coffee', 'tea', 'smoothie', 'juice', 'soda',
-          'latte', 'cappuccino', 'milkshake', 'cocktail'
+  // Create addon groups
+  const syrupAddons = await prisma.addonGroup.create({
+    data: {
+      name: 'Syrups',
+      limit: 2,
+      sortOrder: 1,
+      addons: {
+        create: [
+          { name: 'Vanilla Syrup', price: 5, limit: 1, sortOrder: 1 },
+          { name: 'Caramel Syrup', price: 5, limit: 1, sortOrder: 2 },
+          { name: 'Hazelnut Syrup', price: 5, limit: 1, sortOrder: 3 },
+          { name: 'Chocolate Syrup', price: 5, limit: 1, sortOrder: 4 },
         ],
-        'Food': [
-          'burger', 'pizza', 'sandwich', 'pasta', 'salad',
-          'sushi', 'rice', 'noodles'
-        ],
-        'Desserts': [
-          'cake', 'ice-cream', 'cookie', 'donut', 'pie',
-          'brownie', 'pudding'
-        ],
-        'Snacks': [
-          'chips', 'popcorn', 'nuts', 'fries', 'nachos',
-          'pretzels'
-        ]
-      };
+      },
+    },
+  })
 
-      const types = imageTypes[category.name] || ['food'];
-      const randomType = types[Math.floor(Math.random() * types.length)];
-      return faker.image.urlLoremFlickr({ width: 400, height: 300 });
-    };
+  const milkOptions = await prisma.addonGroup.create({
+    data: {
+      name: 'Milk Options',
+      limit: 1,
+      sortOrder: 2,
+      addons: {
+        create: [
+          { name: 'Oat Milk', price: 5, limit: 1, sortOrder: 1 },
+          { name: 'Almond Milk', price: 5, limit: 1, sortOrder: 2 },
+          { name: 'Soy Milk', price: 5, limit: 1, sortOrder: 3 },
+          { name: 'Coconut Milk', price: 5, limit: 1, sortOrder: 4 },
+        ],
+      },
+    },
+  })
 
-    // Create products
-    for (const category of categories) {
-      const productsCount = faker.number.int({ min: 3, max: 6 });
-      console.log(`Creating ${productsCount} products for category ${category.name}...`);
-      
-      for (let i = 0; i < productsCount; i++) {
-        const product = await prisma.product.create({
-          data: {
-            name: faker.commerce.productName(),
-            basePrice: faker.number.int({ min: 500, max: 2000 }),
-            description: faker.commerce.productDescription(),
-            imageUrl: getRandomImageUrl(category),
-            categoryId: category.id,
-            modifications: {
+  const extraShots = await prisma.addonGroup.create({
+    data: {
+      name: 'Extra Shots',
+      limit: 4,
+      sortOrder: 3,
+      addons: {
+        create: [
+          { name: 'Extra Espresso Shot', price: 7, limit: 4, sortOrder: 1 },
+          { name: 'Decaf Shot', price: 7, limit: 4, sortOrder: 2 },
+        ],
+      },
+    },
+  })
+
+  const toppings = await prisma.addonGroup.create({
+    data: {
+      name: 'Toppings',
+      limit: 3,
+      sortOrder: 4,
+      addons: {
+        create: [
+          { name: 'Whipped Cream', price: 5, limit: 1, sortOrder: 1 },
+          { name: 'Cinnamon', price: 0, limit: 1, sortOrder: 2 },
+          { name: 'Chocolate Powder', price: 0, limit: 1, sortOrder: 3 },
+          { name: 'Caramel Drizzle', price: 5, limit: 1, sortOrder: 4 },
+        ],
+      },
+    },
+  })
+
+  const pastryExtras = await prisma.addonGroup.create({
+    data: {
+      name: 'Extra Options',
+      limit: 2,
+      sortOrder: 5,
+      addons: {
+        create: [
+          { name: 'Extra Butter', price: 0, limit: 1, sortOrder: 1 },
+          { name: 'Jam', price: 5, limit: 1, sortOrder: 2 },
+          { name: 'Honey', price: 5, limit: 1, sortOrder: 3 },
+          { name: 'Cream Cheese', price: 7, limit: 1, sortOrder: 4 },
+        ],
+      },
+    },
+  })
+
+  // Create hot drinks
+  const latte = await prisma.product.create({
+    data: {
+      name: 'Caffè Latte',
+      basePrice: 45,
+      description: 'Espresso with steamed milk and a light layer of foam',
+      categoryId: hotDrinks.id,
+      modifications: {
+        create: [
+          {
+            type: 'sizes',
+            options: {
               create: [
-                {
-                  name: 'Size',
-                  options: {
-                    create: [
-                      { name: 'Small', addonPrice: 0, sortOrder: 1 },
-                      { name: 'Medium', addonPrice: 100, sortOrder: 2 },
-                      { name: 'Large', addonPrice: 200, sortOrder: 3 },
-                    ],
-                  },
-                },
-                {
-                  name: 'Temperature',
-                  options: {
-                    create: [
-                      { name: 'Hot', addonPrice: 0, sortOrder: 1 },
-                      { name: 'Iced', addonPrice: 50, sortOrder: 2 },
-                    ],
-                  },
-                },
+                { name: 'Small', addonPrice: 0, sortOrder: 1 },
+                { name: 'Medium', addonPrice: 5, sortOrder: 2 },
+                { name: 'Large', addonPrice: 10, sortOrder: 3 },
               ],
             },
-            addonGroups: {
-              create: addonGroups
-                .slice(0, faker.number.int({ min: 1, max: 3 }))
-                .map(group => ({
-                  addonGroupId: group.id,
-                })),
+          },
+        ],
+      },
+      addonGroups: {
+        connect: [
+          { id: syrupAddons.id },
+          { id: milkOptions.id },
+          { id: extraShots.id },
+          { id: toppings.id },
+        ],
+      },
+    },
+  })
+
+  const cappuccino = await prisma.product.create({
+    data: {
+      name: 'Cappuccino',
+      basePrice: 45,
+      description: 'Equal parts espresso, steamed milk, and milk foam',
+      categoryId: hotDrinks.id,
+      modifications: {
+        create: [
+          {
+            type: 'sizes',
+            options: {
+              create: [
+                { name: 'Small', addonPrice: 0, sortOrder: 1 },
+                { name: 'Medium', addonPrice: 5, sortOrder: 2 },
+                { name: 'Large', addonPrice: 10, sortOrder: 3 },
+              ],
             },
           },
-        });
-        console.log(`Created product: ${product.name}`);
-      }
-    }
+        ],
+      },
+      addonGroups: {
+        connect: [
+          { id: syrupAddons.id },
+          { id: milkOptions.id },
+          { id: extraShots.id },
+          { id: toppings.id },
+        ],
+      },
+    },
+  })
 
-    // Verify data
-    const counts = await prisma.$transaction([
-      prisma.category.count(),
-      prisma.product.count(),
-      prisma.modification.count(),
-      prisma.modificationOption.count(),
-      prisma.addonGroup.count(),
-      prisma.addon.count(),
-      prisma.addonGroupRelation.count(),
-    ]);
+  const americano = await prisma.product.create({
+    data: {
+      name: 'Americano',
+      basePrice: 38,
+      description: 'Espresso shots topped with hot water',
+      categoryId: hotDrinks.id,
+      modifications: {
+        create: [
+          {
+            type: 'sizes',
+            options: {
+              create: [
+                { name: 'Small', addonPrice: 0, sortOrder: 1 },
+                { name: 'Medium', addonPrice: 5, sortOrder: 2 },
+                { name: 'Large', addonPrice: 10, sortOrder: 3 },
+              ],
+            },
+          },
+        ],
+      },
+      addonGroups: {
+        connect: [
+          { id: syrupAddons.id },
+          { id: extraShots.id },
+        ],
+      },
+    },
+  })
 
-    console.log('Final counts:', {
-      categories: counts[0],
-      products: counts[1],
-      modifications: counts[2],
-      modificationOptions: counts[3],
-      addonGroups: counts[4],
-      addons: counts[5],
-      addonGroupRelations: counts[6],
-    });
+  // Create cold drinks
+  const icedLatte = await prisma.product.create({
+    data: {
+      name: 'Iced Latte',
+      basePrice: 48,
+      description: 'Espresso with cold milk and ice',
+      categoryId: coldDrinks.id,
+      modifications: {
+        create: [
+          {
+            type: 'sizes',
+            options: {
+              create: [
+                { name: 'Small', addonPrice: 0, sortOrder: 1 },
+                { name: 'Medium', addonPrice: 5, sortOrder: 2 },
+                { name: 'Large', addonPrice: 10, sortOrder: 3 },
+              ],
+            },
+          },
+        ],
+      },
+      addonGroups: {
+        connect: [
+          { id: syrupAddons.id },
+          { id: milkOptions.id },
+          { id: extraShots.id },
+          { id: toppings.id },
+        ],
+      },
+    },
+  })
 
-  } catch (error) {
-    console.error('Seed error:', error);
-    throw error;
-  }
+  const frappuccino = await prisma.product.create({
+    data: {
+      name: 'Frappuccino',
+      basePrice: 52,
+      description: 'Blended ice drink with coffee, milk, and whipped cream',
+      categoryId: coldDrinks.id,
+      modifications: {
+        create: [
+          {
+            type: 'sizes',
+            options: {
+              create: [
+                { name: 'Small', addonPrice: 0, sortOrder: 1 },
+                { name: 'Medium', addonPrice: 5, sortOrder: 2 },
+                { name: 'Large', addonPrice: 10, sortOrder: 3 },
+              ],
+            },
+          },
+          {
+            type: 'flavours',
+            options: {
+              create: [
+                { name: 'Coffee', addonPrice: 0, sortOrder: 1 },
+                { name: 'Mocha', addonPrice: 5, sortOrder: 2 },
+                { name: 'Caramel', addonPrice: 5, sortOrder: 3 },
+                { name: 'Vanilla', addonPrice: 5, sortOrder: 4 },
+              ],
+            },
+          },
+        ],
+      },
+      addonGroups: {
+        connect: [
+          { id: syrupAddons.id },
+          { id: milkOptions.id },
+          { id: extraShots.id },
+          { id: toppings.id },
+        ],
+      },
+    },
+  })
+
+  const coldBrew = await prisma.product.create({
+    data: {
+      name: 'Cold Brew',
+      basePrice: 45,
+      description: 'Smooth, cold-extracted coffee served over ice',
+      categoryId: coldDrinks.id,
+      modifications: {
+        create: [
+          {
+            type: 'sizes',
+            options: {
+              create: [
+                { name: 'Small', addonPrice: 0, sortOrder: 1 },
+                { name: 'Medium', addonPrice: 5, sortOrder: 2 },
+                { name: 'Large', addonPrice: 10, sortOrder: 3 },
+              ],
+            },
+          },
+        ],
+      },
+      addonGroups: {
+        connect: [
+          { id: syrupAddons.id },
+          { id: milkOptions.id },
+        ],
+      },
+    },
+  })
+
+  // Create pastries
+  const croissant = await prisma.product.create({
+    data: {
+      name: 'Butter Croissant',
+      basePrice: 35,
+      description: 'Classic French butter croissant',
+      categoryId: pastries.id,
+      addonGroups: {
+        connect: [
+          { id: pastryExtras.id },
+        ],
+      },
+    },
+  })
+
+  const muffin = await prisma.product.create({
+    data: {
+      name: 'Blueberry Muffin',
+      basePrice: 32,
+      description: 'Fresh-baked muffin with real blueberries',
+      categoryId: pastries.id,
+      addonGroups: {
+        connect: [
+          { id: pastryExtras.id },
+        ],
+      },
+    },
+  })
+
+  const brownie = await prisma.product.create({
+    data: {
+      name: 'Double Chocolate Brownie',
+      basePrice: 38,
+      description: 'Rich chocolate brownie with chocolate chunks',
+      categoryId: pastries.id,
+      addonGroups: {
+        connect: [
+          { id: toppings.id },
+        ],
+      },
+    },
+  })
+
+  console.log('Seeding completed successfully!')
 }
 
 main()
   .catch((e) => {
-    console.error(e);
-    process.exit(1);
+    console.error(e)
+    process.exit(1)
   })
   .finally(async () => {
-    await prisma.$disconnect();
-  });
+    await prisma.$disconnect()
+  })

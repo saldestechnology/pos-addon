@@ -6,11 +6,17 @@ export async function GET(request: NextRequest) {
     const products = await prisma.product.findMany({
       include: {
         category: true,
+        modifications: {
+          include: { options: true }
+        },
+        addonGroups: {
+          include: { addons: true }
+        },
       }
     });
     
     return NextResponse.json({ data: products });
-  } catch (error: any) { // Type assertion here
+  } catch (error: any) {
     console.error('Detailed error:', {
       message: error.message,
       code: error.code,
@@ -23,31 +29,6 @@ export async function GET(request: NextRequest) {
         details: error.message,
         code: error.code
       },
-      { status: 500 }
-    );
-  }
-}
-
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const product = await prisma.product.create({
-      data: {
-        name: body.name,
-        basePrice: body.basePrice,
-        description: body.description,
-        categoryId: body.categoryId,
-        imageUrl: body.imageUrl,
-      },
-      include: {
-        category: true,
-      },
-    });
-    return NextResponse.json({ data: product }, { status: 201 });
-  } catch (error) {
-    console.error('Error creating product:', error);
-    return NextResponse.json(
-      { error: 'Failed to create product' },
       { status: 500 }
     );
   }

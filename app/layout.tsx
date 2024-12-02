@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import SearchBar from "@/components/SearchBar";
 import CategoryList from "@/components/CategoryList/CategoryList";
+import OrderList from "@/components/OrderList";
+import { OrderProvider } from "@/context/OrderContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,13 +32,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="grid h-screen w-screen grid-cols-12 grid-rows-12">
-          <SearchBar />
-          <CategoryList />
-          {children}
-          <div className="col-span-9 row-start-12 row-end-13 bg-blue-500"></div>
-          <div className="col-start-10 col-end-13 row-start-1 row-end-13 bg-emerald-500"></div>
-        </div>
+        <OrderProvider>
+          <div className="grid h-screen w-screen grid-cols-12 grid-rows-12">
+            <SearchBar />
+            <CategoryList />
+            {children}
+            <div className="col-span-9 row-start-12 row-end-13 bg-slate-600"></div>
+            <OrderList />
+          </div>
+        </OrderProvider>
       </body>
     </html>
   );

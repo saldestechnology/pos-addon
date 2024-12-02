@@ -1,18 +1,18 @@
-import { Product } from "@prisma/client";
 import Button from "./Button";
+import { ProductWithAddons } from "../types/product";
 
 interface ListProductsProps {
-  products: Product[];
+  products: ProductWithAddons[];
 }
 
-export default ({ products }: ListProductsProps) => {
+export default function ListProducts({ products }: ListProductsProps) {
   return (
-    <ul className="flex w-full flex-wrap gap-4">
-      {products.map(({ id, name }) => (
-        <li key={id}>
-          <Button id={id} name={name} />
+    <ul className="flex w-full flex-wrap gap-4 py-4">
+      {products.map((product) => (
+        <li key={product.id}>
+          <Button product={product} />
         </li>
       ))}
     </ul>
   );
-};
+}
