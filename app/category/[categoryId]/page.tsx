@@ -1,5 +1,5 @@
 import ListProducts from "@/components/ListProducts/ListProducts";
-import { ProductWithAddons } from "@/components/ListProducts/types/product";
+import { ProductWithAddons } from "@/components/types/product";
 import { prisma } from "@/lib/prisma";
 
 export default async function CategoryById({
