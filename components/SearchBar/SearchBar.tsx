@@ -56,7 +56,7 @@ export default function SearchBar() {
         </button>
       </div>
       {search && (
-        <div className="animate-fade z-20 col-start-3 col-end-9 row-start-3 row-end-9 overflow-y-scroll bg-white p-2 shadow-xl">
+        <div className="scrollbar-hide animate-fade-up z-20 col-start-3 col-end-9 row-start-3 row-end-9 overflow-y-auto bg-white p-2 shadow-2xl">
           {isLoading ? (
             <div className="flex h-full w-full items-center justify-center">
               <AiOutlineLoading3Quarters className="h-8 w-8 animate-spin text-gray-600" />
@@ -67,10 +67,10 @@ export default function SearchBar() {
                 <li key={product.id}>
                   <button
                     onClick={() => handleClick(product.id)}
-                    className="border-1 flex h-32 w-32 flex-col items-center justify-between rounded-md border-slate-500 bg-white p-2 text-black"
+                    className="flex h-32 w-32 flex-col items-center justify-between rounded-md border-1 border-slate-500 bg-white p-2 text-black"
                   >
                     <div className="flex">{product.name}</div>
-                    <div className="border-t-1 w-9/12 pt-1">
+                    <div className="w-9/12 border-t-1 pt-1">
                       {product.basePrice} kr
                     </div>
                   </button>
