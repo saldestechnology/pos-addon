@@ -7,7 +7,7 @@ export default function OrderList() {
   const { orderItems, updateQuantity, total } = useOrder();
 
   return (
-    <div className="col-start-10 col-end-13 row-start-1 row-end-13 flex h-full flex-col border-l-1 border-slate-600 bg-white">
+    <div className="col-start-18 col-end-25 row-end-25 row-start-1 flex h-full flex-col border-l-1 border-slate-600 bg-white">
       <div className="flex-grow pt-4">
         {orderItems.length ? (
           orderItems.map((item) => (

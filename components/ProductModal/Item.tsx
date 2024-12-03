@@ -15,7 +15,7 @@ export default function Item({ addon, onChange }: ItemProps) {
   return (
     <label
       onClick={handleCheck}
-      className="group my-2 flex cursor-pointer items-center space-x-3 pl-2"
+      className="group my-4 flex cursor-pointer items-center space-x-3 pl-2"
     >
       <div
         className={`h-5 w-5 rounded-full border transition-all duration-300 ${checked ? "border-gray-900 shadow-lg" : "border-gray-200"}`}

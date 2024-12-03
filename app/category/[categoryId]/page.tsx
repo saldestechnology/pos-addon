@@ -28,7 +28,7 @@ export default async function CategoryById({ params }: { params: Params }) {
   });
 
   return (
-    <div className="col-start-2 col-end-10 row-start-1 row-end-12 bg-white px-4 pt-4">
+    <div className="col-end-20 row-end-25 col-start-4 row-start-1 bg-white px-4 pt-4">
       <h1 className="mb-2 text-4xl font-bold text-black">{category?.name}</h1>
       <hr />
       <ProductsList products={products} />

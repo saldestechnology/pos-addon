@@ -18,6 +18,7 @@ export default function SearchBar() {
   };
 
   const addOrder = async (productId: string) => {
+    console.log("Adding order for product", productId);
     const res = await fetch(`/api/products/${productId}`);
     if (!res.ok) return;
     const product: ProductWithAddons = await res.json();
@@ -30,6 +31,7 @@ export default function SearchBar() {
   const handleReset = () => {
     setSearch("");
     setProducts([]);
+    setIsSearchModalOpen(false);
   };
 
   return (
