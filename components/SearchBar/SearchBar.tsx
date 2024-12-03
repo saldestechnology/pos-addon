@@ -1,25 +1,24 @@
 "use client";
 import { useState } from "react";
 import { Product } from "@prisma/client";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import ProductModal from "@/components/ProductModal/ProductModal";
 import { ProductWithAddons } from "@/components/types/product";
 import SearchModal from "../SearchModal";
 
 export default function SearchBar() {
-  const [search, setSearch] = useState("");
-  const [products, setProducts] = useState<Product[]>([]);
+  const [, setSearch] = useState("");
+  const [, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] =
     useState<ProductWithAddons | null>(null);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleOpenSearchModal = () => {
     setIsSearchModalOpen(!isSearchModalOpen);
   };
 
   const addOrder = async (productId: string) => {
+    console.log("Adding order for product", productId);
     const res = await fetch(`/api/products/${productId}`);
     if (!res.ok) return;
     const product: ProductWithAddons = await res.json();
@@ -32,6 +31,7 @@ export default function SearchBar() {
   const handleReset = () => {
     setSearch("");
     setProducts([]);
+    setIsSearchModalOpen(false);
   };
 
   return (

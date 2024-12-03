@@ -1,12 +1,9 @@
-import ListProducts from "@/components/ListProducts/ListProducts";
 import { prisma } from "@/lib/prisma";
 import { Product } from "@prisma/client";
 
-export default async function ProductById({
-  params,
-}: {
-  params: { productId: string };
-}) {
+type Params = Promise<{ productId: string }>;
+
+export default async function ProductById({ params }: { params: Params }) {
   const { productId } = await params;
   const product: Product | null = await prisma.product.findUnique({
     where: { id: productId },

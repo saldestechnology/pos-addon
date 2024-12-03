@@ -1,12 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { ProductWithAddons } from '@/components/types/product';
 
+type Params = Promise<{ id: string }>
+
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: { params: Params }
 ) {
   try {
+    const params = await context.params;
     const product: ProductWithAddons | null = await prisma.product.findUnique({
       where: { id: params.id },
       include: {
