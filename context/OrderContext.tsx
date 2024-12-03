@@ -51,7 +51,7 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
 
   const removeFromOrder = (productId: string) => {
     setOrderItems((prevItems) =>
-      prevItems.filter((item) => item.product.id !== productId),
+      prevItems.filter((item) => item.id !== productId),
     );
   };
 
