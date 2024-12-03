@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import CategoryList from "@/components/CategoryList/CategoryList";
-import OrderList from "@/components/OrderList";
-import { OrderProvider } from "@/context/OrderContext";
-import { prisma } from "@/lib/prisma";
-import { Category } from "@prisma/client";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,19 +23,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categories: Category[] = await prisma.category.findMany({});
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <OrderProvider>
-          <div className="grid-cols-24 grid-rows-24 grid h-screen w-screen">
-            <CategoryList categories={categories} />
-            {children}
-            <OrderList />
-          </div>
-        </OrderProvider>
+        {children}
       </body>
     </html>
   );
