@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { meta } from "@/meta/meta";
 import localFont from "next/font/local";
 import "./globals.css";
+import { OrderProvider } from "@/context/OrderContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,7 +30,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <OrderProvider>{children}</OrderProvider>
       </body>
     </html>
   );
