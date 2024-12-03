@@ -27,6 +27,9 @@ export default {
       height: {
         112: "28rem",
       },
+      boxShadow: {
+        'premium': '0 10px 40px -3px rgb(59 130 246 / 0.15), 0 4px 12px -2px rgb(0 0 0 / 0.08)',
+      },
       gridTemplateColumns: {
         '13': 'repeat(13, minmax(0, 1fr))',
         '14': 'repeat(14, minmax(0, 1fr))',
