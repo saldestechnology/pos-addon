@@ -1,4 +1,4 @@
-import Header from "@/components/admin/Header";
+import Header from "@/components/admin/AppBar";
 import Sidebar from "@/components/admin/Sidebar";
 
 export default function Layout({
