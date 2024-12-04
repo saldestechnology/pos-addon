@@ -1,31 +1,22 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { BiChevronLeft } from "react-icons/bi";
-import { FiSettings } from "react-icons/fi";
+import SearchFilterBar from "@/components/admin/SearchFilterBar/SearchFilterBar";
+import { FaPlus } from "react-icons/fa";
 
 export default function Header() {
-  const router = useRouter();
-
-  const handleGoBack = () => {
-    router.push("/");
+  const onAddProduct = () => {
+    console.log("Add Product");
   };
-
   return (
-    <header className="fixed left-0 right-0 top-0 z-10 flex h-14 items-center justify-between border-b border-gray-200 bg-white px-6">
-      <div className="flex w-full">
-        <button onClick={handleGoBack} className="rounded-sm bg-blue-600">
-          <BiChevronLeft size={24} />
-        </button>
-        <h1 className="ml-4 text-xl font-semibold text-gray-900">
-          Admin Dashboard
-        </h1>
-      </div>
-      <div className="flex items-center gap-4">
-        <button className="rounded-lg p-2 hover:bg-gray-100">
-          <FiSettings className="h-5 w-5 text-gray-600" />
+    <div className="flex items-center justify-between">
+      <SearchFilterBar />
+      <div className="flex gap-3">
+        <button
+          onClick={onAddProduct}
+          className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+        >
+          <FaPlus className="h-4 w-4" />
+          Add Product
         </button>
       </div>
-    </header>
+    </div>
   );
 }
